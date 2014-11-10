@@ -17,25 +17,16 @@ class Apartamento
 		$this->conexao = $conexao;
 	}
 	
-	public function calculaSaldo($valor, Apartamento $apartamento)
-	{
-		(is_numeric($valor) && $valor > 0) ? $apartamento->setSaldo($apartamento->getSaldo() + $valor) : '';
-
-		return $apartamento->getSaldo();
-	}
-
-	public function mostraDados()
-	{
-
-		echo 'Nome: '. 		    $this->getMorador() . '<br/>';
-		echo 'Número do AP:'.   $this->getNumero() .  '<br/>';
-		echo 'Saldo devedor: '. $this->getSaldo() .   '</br>';
-
-	}
-
 	public function selectData()
 	{
 		$sql = "SELECT * FROM apartamento";
+
+		return $this->conexao->select($sql);
+	}
+
+	public function editData($id)
+	{
+		$sql = "SELECT * FROM apartamento WHERE id_apartamento = ".$id." ";
 
 		return $this->conexao->select($sql);
 	}
@@ -69,12 +60,12 @@ class Apartamento
 		return ($this->conexao->update($sql, $params) > 0) ? true : false;
 	}
 
-	public function deleteData(Apartamento $apartamento)
+	public function deleteData($id)
 	{
 		$sql = "DELETE FROM apartamento WHERE id_apartamento = :id_apartamento";
 
 		$params = array(
-			':id_apartamento' => $apartamento->getId(),
+			':id_apartamento' => $id,
 		);
 
 		return ($this->conexao->delete($sql, $params) > 0) ? true : false;

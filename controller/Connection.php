@@ -47,15 +47,15 @@ class Connection
         $query=$this->connect()->prepare($sql);
         $query->execute($params);
          
-        if(isset($class)){
-            $rs = $query->fetchAll(PDO::FETCH_CLASS,$class) or die(print_r($query->errorInfo(), true));
-        }else{
+        if ($query->rowCount() > 0)
             $rs = $query->fetchAll(PDO::FETCH_OBJ) or die(print_r($query->errorInfo(), true));
-        }
+        else
+            $rs = false;
+        
         self::disconnect();
         return $rs;
     }
-     
+
     /*Método insert que insere valores no banco de dados e retorna o último id inserido*/
     public function insert($sql,$params=null){
         $conexao=$this->connect();
@@ -70,7 +70,10 @@ class Connection
     public function update($sql,$params=null){
         $query=$this->connect()->prepare($sql);
         $query->execute($params);
-        $rs = $query->rowCount() or die(print_r($query->errorInfo(), true));
+        if ($query->rowCount() > 0)
+            $rs = $query->rowCount() or die(print_r($query->errorInfo(), true));
+        else
+            $rs = true;
         self::disconnect();
         return $rs;
     }

@@ -1,10 +1,9 @@
 <?php
 
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
-define('DIR_APP', '/var/www/html/phpunit/');
-define('SMARTY_DIR', '/var/www/html/phpunit/config/smarty2/libs/');
-define('SMARTY_FOLDERS', '/var/www/html/phpunit/config/smarty2/');
-
+define('DIR_APP', $_SERVER['DOCUMENT_ROOT']);
+define('DIR_URL', $_SERVER['HTTP_HOST'].'/sistema');
+define('DIR_ASSETS', '/sistema/');
 
 
