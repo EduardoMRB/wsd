@@ -3,10 +3,11 @@ ini_set('display_errors', 1);
 
 session_start();
 
-require_once('controller/Connection.php');
-require_once('controller/Apartamento.php');
-require_once('controller/Despesa.php');
-require_once('vendor/autoload.php');
+require __DIR__ . '/vendor/autoload.php';
+
+use WSD\Entity\Apartamento;
+use WSD\Entity\Despesa;
+use WSD\Connection;
 
 $app = new \Slim\Slim(array(
 	'debug' => true,
