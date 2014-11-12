@@ -9,13 +9,15 @@ use WSD\Entity\Apartamento;
 use WSD\Entity\Despesa;
 use WSD\Entity\Mes;
 use WSD\Connection;
+use WSD\Config\ConfigContainer;
 
 $app = new \Slim\Slim(array(
 	'debug' => true,
 	'templates.path' => 'view',
 ));
 
-$con = new Connection();
+$container = new ConfigContainer(__DIR__ . '/config/config.yml');
+$con = new Connection($container);
 
 $app->get('/', function() use ($app, $con){
 
