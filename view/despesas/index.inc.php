@@ -1,4 +1,4 @@
-<?php include($_SERVER['DOCUMENT_ROOT']."/sistema/view/header.inc.php"); ?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/wsd/view/header.inc.php"); ?>
 
 <!-- start content-outer ........................................................................................................................START -->
 <div id="content-outer">
@@ -49,18 +49,18 @@
 					<th class="table-header-repeat line-left"><a href="">Valor</a></th>
 					<th class="table-header-options line-left"><a href="">Options</a></th>
 				</tr>
-				<?php 
-
+				<?php 	
 					if ($despesas != null) {
 						foreach($despesas as $key => $value) { 
 
+						$data = explode('/', $value->vencimento);	
 				?>
 				<tr>
 					<td><input  type="checkbox"/></td>
-					<td><?php echo $value->mes?></td>
-					<td><?php echo $value->ano?></td>
+					<td><?php echo $data[1]?></td>
+					<td><?php echo $data[2]?></td>
 					<td><?php echo $value->vencimento?></td>
-					<td><?php echo $value->valor?></td>
+					<td><?php echo $value->valorCondominio?></td>
 					<td class="options-width">
 					<a href="<?php echo DIR_ASSETS ?>despesas/edit/<?php echo $value->ID ?>" title="Edit" class="icon-1 info-tooltip"></a>
 					<a href="<?php echo DIR_ASSETS ?>despesas/delete/<?php echo $value->ID ?>" title="Delete" class="icon-2 info-tooltip"></a>

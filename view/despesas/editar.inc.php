@@ -11,6 +11,7 @@ require_once __DIR__.'/../header.inc.php'; ?>
 				var input = '<li><label for="Descricao da Despesa">Descricao da Despesa: </label>';
 				input += '<input type="text" name="descricao[]" id="valor" class="form-control" placeholder="descricao">';
 				input += '<input type="hidden" name="idDespesa[]" id="idDespesa" class="form-control">';
+				input += '<input type="text" name="valorDespesa[]" id="valorDespesa" class="form-control" placeholder="valor">';
 				input += '</li>';
 
 				$('#despesas').append(input);
@@ -20,8 +21,8 @@ require_once __DIR__.'/../header.inc.php'; ?>
 			$('#despesas li #remove').on('click', function() {
 				if(confirm('Tem certeza que deseja excluir esta despesa')) {
 					var id = $(this).attr('data-id');
-					$.get('/sistema/controller/ajax.php?action=1&id='+id, function(){
-						console.log('removido com sucesso');
+					$.get('/wsd/despesas/delete/single/'+id, function(){
+						console.log('/despesas/delete/single/' +id);
 					});
 	        		$(this).parent().remove(); // Remove o item
 	        	}	
@@ -32,7 +33,7 @@ require_once __DIR__.'/../header.inc.php'; ?>
 	<div class="container">
 		<div class="form-group">
 			<form action="" method="post" role="form" style="max-width:300px">
-				<legend>Editar Despesa</legend>
+				<legend>Editando Lançamento de Despesa do Condomínio</legend>
 
 				<?php if(isset($flash['error'])) { ?>
 					<p class="text-error"><?php echo $flash['error']; ?></p>
@@ -46,17 +47,11 @@ require_once __DIR__.'/../header.inc.php'; ?>
 					foreach ($despesas as $key => $value) { 
 				?>
 
-				<label for="Mes">Mes de referência: </label>
-				<input type="text" name="mes" id="mes" class="form-control" placeholder="Mes de referência" value="<?php echo $value->mes ?>">
-				<br>
-				<label for="Ano de referência">Ano de referência: </label>
-				<input type="text" name="ano" id="ano" class="form-control" placeholder="ano" value="<?php echo $value->ano ?>">
-				<br>
 				<label for="Vencimento">Vencimento: </label>
 				<input type="text" name="vencimento" id="vencimento" class="form-control" placeholder="vencimento" value="<?php echo $value->vencimento ?>">
 				<br>
 				<label for="Valor">Valor: </label>
-				<input type="text" name="valor" id="valor" class="form-control" placeholder="valor" value="<?php echo $value->valor ?>">
+				<input type="text" name="valor" id="valor" class="form-control" placeholder="valor" value="<?php echo $value->valorCondominio ?>">
 				<br>
 				<?php } // end foreach 1 ?>
 				<?php } // end if 1 ?>
@@ -68,7 +63,11 @@ require_once __DIR__.'/../header.inc.php'; ?>
 					?>							
 						<li>
 							<label for="Descricao da Despesa">Descricao da Despesa: </label>
-							<input type="text" name="descricao[]" id="descricao" class="form-control" placeholder="descricao" value="<?php echo $d->descricao ?>">
+							<input type="text" name="descricao[]" id="descricao" class="form-control" placeholder="descricao" value="<?php echo $d->descricao ?>"> 
+							<br/>
+							<label for="Valor da Despesa">Valor da Despesa: </label>
+							<input type="text" name="valorDespesa[]" id="valorDespesa" class="form-control" placeholder="valor" value="<?php echo $d->valor ?>">
+							<br>
 							<input type="hidden" name="idDespesa[]" id="idDespesa" class="form-control" value="<?php echo $d->idDespesa ?>">	
 							<span id="remove" data-id="<?php echo $d->idDespesa;?>">Excluir</span>
 						</li>
@@ -81,7 +80,9 @@ require_once __DIR__.'/../header.inc.php'; ?>
 
 				<a id="add" href="" class"btn btn-primary">Adicionar Despesa</a>	
 
-				<br>
+				<br/>
+
+				<br/>
 
 				<button type="submit" class="btn btn-primary">Actualizar</button>
 

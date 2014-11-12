@@ -17,7 +17,7 @@
 		<h1><a href="apartamento/new">Adicionar Morador</a></h1>
 	</div>
 	<div id="page-heading">
-		<h1><a href="despesa/new">Adicionar Despesa</a></h1>
+		<h1><a href="despesas/new">Adicionar Despesa</a></h1>
 	</div>
 	<!-- end page-heading -->
 

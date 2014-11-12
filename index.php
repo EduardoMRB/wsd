@@ -7,6 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 use WSD\Entity\Apartamento;
 use WSD\Entity\Despesa;
+use WSD\Entity\Mes;
 use WSD\Connection;
 
 $app = new \Slim\Slim(array(
@@ -110,9 +111,9 @@ $app->group('/despesas' , function() use ($app, $con){
 
 	$app->get('/home', function() use ($app, $con){
 
-		$despesa = new Despesa($con);
+		$mes = new Mes($con);
 
-		$data['despesas'] = $despesa->selectData();
+		$data['despesas'] = $mes->selectData();
 
 		$app->render('despesas/index.inc.php', $data);
 
@@ -123,6 +124,30 @@ $app->group('/despesas' , function() use ($app, $con){
 		$app->render('despesas/novo.inc.php');
 
 	})->name('newDespesa');
+
+	$app->post('/new', function() use ($app, $con){
+
+		$request = $app->request;
+		$mes     = new Mes($con);
+		$mes->setVencimento($request->post('vencimento'));
+		$mes->setValorCondominio($request->post('valor'));
+		$idMesRef = $mes->insertData($mes);
+
+		$despesa = new Despesa($con);
+		$despesa->setIdMesRef($idMesRef);
+		$despesa->setDescricao($request->post('descricao'));
+		$despesa->setValor($request->post('valorDespesa'));
+
+		if($despesa->insertDespesa($despesa))
+			$app->flash('message', 'Dados inseridos com sucesso');
+		else
+			$app->flash('error', 'Houve um erro ao inserir os dados');
+
+		$redirect = $app->urlFor('newDespesa');
+
+		$app->redirect($redirect);
+
+	});
 
 	$app->get('/view/:id', function($id) use ($app, $con){
 
@@ -136,32 +161,12 @@ $app->group('/despesas' , function() use ($app, $con){
 
 	})->name('viewDespesa');
 
-	$app->post('/new', function() use ($app, $con){
-
-		$request = $app->request;
-		$despesa = new Despesa($con);
-		$despesa->setMes($request->post('mes'));
-		$despesa->setAno($request->post('ano'));
-		$despesa->setVencimento($request->post('vencimento'));
-		$despesa->setValor($request->post('valor'));
-		$despesa->setDescricao($request->post('descricao'));
-		
-		if($despesa->insertData($despesa))
-			$app->flash('message', 'Dados inseridos com sucesso');
-		else
-			$app->flash('error', 'Houve um erro ao inserir os dados');
-
-		$redirect = $app->urlFor('newDespesa');
-
-		$app->redirect($redirect);
-
-	});
-
 	$app->get('/edit/:id', function($id=0) use ($app, $con){
 
 		$despesa = new Despesa($con);
+		$mes 	 = new Mes($con);
 
-		$data['despesas'] = $despesa->selectById($id);
+		$data['despesas'] = $mes->selectById($id);
 		$data['allDespesas'] = $despesa->selectDespesaById($id);
 		$app->render('despesas/editar.inc.php', $data);
 
@@ -173,14 +178,17 @@ $app->group('/despesas' , function() use ($app, $con){
 
 		$request = $app->request;
 
+		$mes     = new Mes($con);
+		$mes->setVencimento($request->post('vencimento'));
+		$mes->setValorCondominio($request->post('valor'));
+		$mes->setId($id);
+		$mes->updateData($mes);
+
 		$despesa = new Despesa($con);
-		$despesa->setMes($request->post('mes'));
-		$despesa->setAno($request->post('ano'));
-		$despesa->setVencimento($request->post('vencimento'));
-		$despesa->setValor($request->post('valor'));
+		$despesa->setIdMesRef($id);
 		$despesa->setDescricao($request->post('descricao'));
+		$despesa->setValor($request->post('valorDespesa'));
 		$despesa->setIdDespesa($request->post('idDespesa'));
-		$despesa->setId($id);
 
 		if($despesa->updateData($despesa))
 			$app->flash('message', 'Despesa atualizada com sucesso');
@@ -197,6 +205,10 @@ $app->group('/despesas' , function() use ($app, $con){
 
 		$despesa = new Despesa($con);
 
+		$mes = new Mes($con);
+
+		$mes->deleteData($id);
+
 		if($despesa->deleteData($id))
 			$app->flash('message', 'Despesa deletada com sucesso');
 		else
@@ -205,6 +217,14 @@ $app->group('/despesas' , function() use ($app, $con){
 		$redirect = $app->urlFor('homeDespesas');
 
 		$app->redirect($redirect);
+
+	});
+
+	$app->get('/delete/single/:id', function($id=0) use ($app, $con){
+
+		$despesa = new Despesa($con);
+
+		$despesa->deleteById($id);
 
 	});
 
