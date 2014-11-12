@@ -1,0 +1,6 @@
+database:
+  adapter: mysql
+  host: localhost
+  database: wsd
+  user: root
+  pass: ""
