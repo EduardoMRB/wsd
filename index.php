@@ -17,13 +17,21 @@ $app = new \Slim\Slim(array(
     'view' => new Slim\Views\Twig(),
 ));
 
-$container = new ConfigContainer(__DIR__ . '/config/config.yml');
-$con = new Connection($container);
+// load twig extensions
+$view = $app->view();
+$view->parserExtensions = array(
+    new Slim\Views\TwigExtension()
+);
+$app->view($view);
+
+// $container = new ConfigContainer(__DIR__ . '/config/config.yml');
+// $con = new Connection($container);
 
 $app->get('/', function() use ($app, $con){
-    $apartamento = new Apartamento($con);
+    // $apartamento = new Apartamento($con);
 
-    $data['apartamentos'] = $apartamento->selectData();
+    // $data['apartamentos'] = $apartamento->selectData();
+    $data['apartamentos'] = [];
 
     $app->render('index.html.twig', $data);
 
