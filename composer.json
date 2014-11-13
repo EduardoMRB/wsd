@@ -1,6 +1,8 @@
 {
     "require": {
-        "slim/slim": "dev-master"
+        "slim/slim": "dev-master",
+        "slim/views": "dev-master",
+        "twig/twig": "dev-master"
     },
     
     "require-dev": {
